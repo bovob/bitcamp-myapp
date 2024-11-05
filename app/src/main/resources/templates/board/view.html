@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head data-th-replace="~{header :: head}">
+</head>
+<header data-th-replace="~{header :: #page-header}"/>
+
+<h1>게시글 조회</h1>
+<body>
+<a data-th-unless="${board}">
+  <p>없는 게시글입니다.</p>
+</a>
+
+<a data-th-if="${board}">
+  <form action='update' method="post" enctype="multipart/form-data">
+    번호: <input readonly name='no' type='text' data-th-value='${board.no}'><br>
+    제목: <input name='title' type='text' data-th-value='${board.title}'><br>
+    내용: <textarea name='content' data-th-text="${board.content}"></textarea><br>
+    작성일: <input readonly type='text'
+                data-th-value="${#dates.format(board.createdDate, 'yyyy-MM-dd')}"/><br>
+    조회수: <input readonly type='text' data-th-value='${board.viewCount}'><br>
+    작성자: <input readonly type='text' data-th-value='${board.writer.name}'><br>
+    첨부파일: <br>
+    <a data-th-if="${board.attachedFiles.size() > 0}">
+      <ul>
+        <li data-th-each="attachedFile : ${board.attachedFiles}">
+          <a data-th-text="${attachedFile.originFilename}"
+             data-th-href="'../download?path=board&fileNo=' + ${attachedFile.fileNo}">첨부파일</a>
+          <a data-th-href="'file/delete?boardNo=' + ${board.no} + '&fileNo=' + ${attachedFile.fileNo}">[삭제]</a>
+        </li>
+      </ul>
+    </a>
+    <input name="files" type="file" multiple><br>
+    <button>변경</button>
+    <button data-th-onclick="|deleteBoard(${board.no})|" type='button'>삭제</button>
+  </form>
+  </div>
+
+  <script>
+    function deleteBoard(no) {
+      location.href = "delete?no=" + no
+    }
+  </script>
+</a>
+</body>
+</html>

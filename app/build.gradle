@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+// bitcamp-myapp.0.0. ~ jar생성
+group = 'bitcamp'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// 스프링 부트 실행 jar 파일을 만들 때 파일명 설정
+bootJar {
+    archiveFileName = "${rootProject.name}.jar"
+}
+
+tasks.named("bootJar") {
+    archiveClassifier = 'boot'
+}
+
+// jar 태스크를 수행하지 않게 설정
+tasks.named("jar") {
+    enabled = false
+}
+
+//bootRun {
+//    systemProperty "spring.profiles.active", "dev"
+//}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// 컴파일에서 사용하기 위해 ex 롬복 사용
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+// Jar 받을 서버
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2'
+    // 롬복 라이브러리
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    // 롬복 @ 애노테이션 처리기
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.3.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+//    testImplementation libs.junit.jupiter
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.772'
+
+//    implementation libs.guava
+}
+
+//application {
+//    mainClass = 'bitcamp.myapp.ServerApp'
+//}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

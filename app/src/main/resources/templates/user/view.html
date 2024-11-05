@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head data-th-replace="~{header :: head}">
+</head>
+<header data-th-replace="~{header :: #page-header}"/>
+
+<h1>회원 조회</h1>
+
+<div data-th-unless="${user}">
+<p>없는 회원입니다.</p>
+</div>
+
+<div data-th-if="${user}" data-th-object="${user}">
+<form method="post" enctype="multipart/form-data">
+
+      <a data-th-href="@{https://kr.object.ncloudstorage.com/bitcamp-bucket102/user/} + *{photo ==null ? 'default.png' : photo}"
+         href="/images/default.png">
+          <img data-th-src="@{https://rz0apkvp4931.edge.naverncp.com/GIub2Lc5DE/user/} + *{photo ==null ? 'default.png' : photo} + '?type=f&w=100&h=100'"
+              src="/images/default.png">
+      </a><input name="file" type="file"><br>
+
+      번호: <input readonly type='text' value='100' data-th-value="*{no}"><br>
+      이름: <input name='name' type='text' value='홍길동' data-th-value="*{name}"><br>
+      이메일: <input name='email' type='email' value='user@test.com' data-th-value="*{email}"><br>
+      암호: <input name='password' type='password'><br>
+      연락처: <input name='tel' type='tel' value="010-1234-1234" data-th-value="*{tel}"><br>
+
+      <button>변경</button>
+      <button type='button' data-th-onclick="'deleteUser(' + ${user.no} + ')'">삭제</button>
+
+</form>
+
+<script>
+  function deleteUser(no) {
+    console.log("삭제실행")
+    const xhr = new XMLHttpRequest();
+    xhr.open("DELETE", location.href, true);
+    xhr.onload = function () {
+      if (xhr.status = 200) {
+        location.href = "../users";
+      } else {
+        window.alert("삭제 실패입니다.");
+      }
+    };
+    xhr.send();
+  }
+</script>
+</div>
+
+</body>
+</html>
