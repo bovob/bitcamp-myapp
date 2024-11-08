@@ -26,7 +26,6 @@ public class ServerApp implements WebMvcConfigurer {
     }
 
     public static void main(String[] args) {
-        a = 100;
         SpringApplication.run(ServerApp.class, args);
     }
 
